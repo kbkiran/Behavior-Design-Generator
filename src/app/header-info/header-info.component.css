@@ -1,0 +1,11 @@
+.heading {
+    width: auto;
+    height: 68px;
+    background-color: #1976d2;
+    padding: 16px;
+    flex-direction: row;
+    overflow: hidden;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+    }

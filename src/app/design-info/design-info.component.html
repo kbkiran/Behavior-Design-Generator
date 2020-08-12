@@ -1,0 +1,80 @@
+<form [formGroup]="testCaseForm">
+    <div formArrayName="testScenarios">
+        <div class="expansion" *ngFor="let case of testCaseForm.get('testScenarios').controls;
+        let testIndex = index"
+            [formGroupName]="testIndex">
+            <mat-accordion multi="true">
+                <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            <h3 class="accordian-header"> Test Case {{testIndex + 1}} </h3>
+                        </mat-panel-title>
+                        <mat-icon class="deleteTestCase" (click)="deleteTestCase(testIndex)">delete</mat-icon>
+                    </mat-expansion-panel-header>
+                    <div formArrayName="testScenario">
+                        <div class="rowData" *ngFor="let row of case.get('testScenario').controls;
+                            let rowIndex = index"
+                            [formGroupName]="rowIndex">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Predicate</mat-label>
+                                        <mat-select formControlName="predicate">
+                                            <mat-option *ngFor="let option of options" [value]="option.value">
+                                                {{option.viewValue}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-3">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Action</mat-label>
+                                        <mat-select formControlName="action">
+                                            <mat-option *ngFor="let action of actions" [value]="action.value">
+                                                {{action.viewValue}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-3">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Scenario</mat-label>
+                                        <input matInput formControlName="scenario" type="text" />
+                                    </mat-form-field>
+                                </div>
+                                <mat-icon *ngIf="case.get('testScenario').controls.length>1" (click)="deleteRow(case, rowIndex)">delete</mat-icon>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <button *ngIf="case.get('testScenario').controls.length <= 3" mat-raised-button color="primary"
+                                class="addButton" (click)="addRow(case, testIndex)">Add Row</button>
+                        </div>
+                        <div class="md-form row">
+                            <div class="col-md-8">
+                                <textarea disabled type="text" id="comments" class="md-textarea md-textarea-auto form-control"
+                                    formControlName="generatedText">{{ testCaseForm.get('testScenarios').at(testIndex).get('generatedText').value}}</textarea>
+                                <label for="comments"></label>
+                            </div>
+                        </div>
+                        <div class="buttonRow">
+                            <button mat-raised-button color="primary" class="marginRight" (click)="generateText(testIndex)">Generate</button>
+                        </div>
+                    </div>
+                </mat-expansion-panel>
+            </mat-accordion>
+        </div>
+    </div>
+    <div class="buttonRow">
+        <button mat-raised-button color="primary" class="addTestCaseButton" (click)="addTestCase()">+ Test Case</button>
+        <button mat-raised-button color="primary" class="addTestCaseButton" (click)="reset()">Reset</button>
+        <button mat-raised-button color="primary" class="addTestCaseButton" [disabled]="disableExportButton" (click)="exportData()">Export</button>
+        <mat-radio-group formControlName="fileType" *ngIf="!disableExportButton">
+            <mat-radio-button class="padding-right-2" *ngFor="let option of fileTypes" [value]="option">
+                <span>{{option}}</span>
+            </mat-radio-button>
+        </mat-radio-group>
+    </div>
+</form>
+
+
+<!--{{ this.testCaseForm.value | json }}-->
